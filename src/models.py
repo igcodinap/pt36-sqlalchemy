@@ -10,10 +10,10 @@ Base = declarative_base()
 # Muchos a Muchos
 # Paso 1 ---> Crear tabla intermedia
 inscription_table = Table(
-    "inscriptions",
-    Base.metadata,
-    Column("student_id", Integer, ForeignKey("students.id")),
-    Column("course_id", Integer, ForeignKey("courses.id")),
+    "inscriptions", # __tablename__
+    Base.metadata, # metadata
+    Column("student_id", Integer, ForeignKey("students.id")), # student_id = Column(Integer, ForeignKey("students.id"))
+    Column("course_id", Integer, ForeignKey("courses.id")), # course_id = Column(Integer, ForeignKey("courses.id"))
 )
 
 
@@ -26,6 +26,27 @@ class Teacher(Base):
     # paso 2.2
     courses = relationship("Course", back_populates="teacher")
 
+    teacher = Teacher().get(id=1)
+    courses = Course().get(teacher_id=1) # no es necesario
+    teacher = {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Salas",
+        "courses": [
+            {
+                "id": 1,
+                "name": "Matematicas",
+                "duration_weeks": 10,
+                "teacher_id": 1,
+            },
+            {
+                "id": 5,
+                "name": "Biologia",
+                "duration_weeks": 10,
+                "teacher_id": 1,
+            },
+        ]
+    }
 
 class Course(Base):
     __tablename__ = "courses"
@@ -43,6 +64,51 @@ class Course(Base):
         secondary=inscription_table,
         back_populates="courses"
     )
+
+    course = Course().get(id=1)
+    teacher = Teacher().get(id=1) # no es necesario
+    course = {
+        "id": 1,
+        "name": "Matematicas",
+        "duration_weeks": 10,
+        "teacher_id": 1,
+        "teacher": {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Salas",
+        },
+        "students": [
+            {
+                "id": 1,
+                "first_name": "Mario",
+                "last_name": "Smith",
+                "age": 15,
+                "grade": "5",
+            },
+            {
+                "id": 2,
+                "first_name": "Fernanda",
+                "last_name": "Rogers",
+                "age": 15,
+                "grade": "5",
+            },
+                        {
+                "id": 3,
+                "first_name": "Juan",
+                "last_name": "Black",
+                "age": 15,
+                "grade": "5",
+            },
+            {
+                "id": 4,
+                "first_name": "Jose",
+                "last_name": "White",
+                "age": 15,
+                "grade": "5",
+            },
+        ]
+
+    }
 
 
 # course1 = {id: 1, name: 'algebra, duration_weeks: 3, teacher_id = 5, teacher = {id: 5, first_name: 'carlos', last_name: 'robles'}}
@@ -62,6 +128,32 @@ class Student(Base):
         secondary=inscription_table,
         back_populates="students"
     )
+
+    student = Student().get(id=1)
+    courses = Course().get(student_id=1) # no es necesario
+    student = {
+        "id": 1,
+        "first_name": "Mario",
+        "last_name": "Smith",
+        "age": 15,
+        "grade": "5",
+        "courses": [
+            {
+                "id": 1,
+                "name": "Matematicas",
+                "duration_weeks": 10,
+                "teacher_id": 1,
+            },
+            {
+                "id": 5,
+                "name": "Biologia",
+                "duration_weeks": 10,
+                "teacher_id": 1,
+            },
+        ]
+    }
+
+
 
 
 
