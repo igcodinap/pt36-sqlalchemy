@@ -6,7 +6,6 @@ from sqlalchemy import create_engine
 from eralchemy2 import render_er
 
 Base = declarative_base()
-
 # Muchos a Muchos
 # Paso 1 ---> Crear tabla intermedia
 inscription_table = Table(
@@ -106,6 +105,13 @@ class Course(Base):
                 "age": 15,
                 "grade": "5",
             },
+            { # course.students.append(student)
+                "id": 5,
+                "first_name": "Maria",
+                "last_name": "Brown",
+                "age": 15,
+                "grade": "5",
+            }
         ]
 
     }
@@ -130,7 +136,21 @@ class Student(Base):
     )
 
     student = Student().get(id=1)
-    courses = Course().get(student_id=1) # no es necesario
+    course = Course().get(id=3)
+    course = {
+        "id": 3,
+        "name": "Historia",
+        "duration_weeks": 10,
+        "teacher_id": 2,
+        "teacher": {
+            "id": 2,
+            "first_name": "Mike",
+            "last_name": "Gonzalez",
+        },
+        "students": []
+    }
+
+
     student = {
         "id": 1,
         "first_name": "Mario",
@@ -152,6 +172,15 @@ class Student(Base):
             },
         ]
     }
+
+    ### modo 1
+    course.students.append(student)
+    db.session.commit()
+    ########
+    ### modo 2
+    student.courses.append(course)
+    db.session.commit()
+
 
 
 
